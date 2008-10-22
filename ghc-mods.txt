@@ -1,0 +1,112 @@
+what to do with C stuff?
+
+principles (so far):
+  - don't use too short names
+
+
+main/
+  GHC.hs                        GHC -- could use some further splitting up
+  Config.hs			GHC.Config
+  Constants.lhs                 GHC.Config.Constants
+  ParsePkgConf.y                GHC.Config.Packages.Parser
+  StaticFlagParser.hs           GHC.Config.[Flags.Static/StaticFlags].Parser
+  StaticFlags.hs                GHC.Config.[Flags.Static/StaticFlags]
+  				GHC.Driver.Make
+  DriverMkDepend.hs             GHC.Driver.Depend -- ?
+  DriverPhases.hs               GHC.Driver.Phase[s] -- ?
+  DriverPipeline.hs		GHC.Driver.Pipeline  -- ?
+  HeaderInfo.hs			GHC.Driver.HeaderInfo -- (used by DriverPipeline, GHC)
+  HscMain.lhs			GHC.Compiler
+  HscStats.lhs			GHC.Compiler.Stats -- only used by HscMain
+  CodeOutput.lhs		GHC.Compiler.CodeOutput -- ?
+  CmdLineParser.hs		GHC.CmdLine.Parser
+  DynFlags.hs                   GHC.Config.[Flags.Dynamic/DynFlags]
+  Finder.lhs                    GHC.Finder
+  HscTypes.lhs/boot		GHC.[Types/DumpHereIfUnsure] -- ideas ?
+  InteractiveEval.hs/boot     	GHC.Interactive
+  PackageConfig.hs              GHC.Config.Package[s]
+  Packages.lhs/boot		GHC.Package[s]
+  PprTyThing.hs			GHC.Interactive.PprTyThing -- ? (used by InteractiveUI, Debugger)
+  SysTools.lhs			GHC.[Driver.]SysTools -- used by GHC, DriverPipeline, DriverMkDepend
+  TidyPgm.lhs			GHC.Core.Tidy.Program -- ?
+  BreakArray.hs                 GHC.[Interactive.]Utils.BreakArray
+  ErrUtils.lhs/boot             GHC.Utils.Error -- depends on StaticFlags, DynFlags, SrcLoc, 
+
+ghci/
+  ByteCodeAsm.lhs		GHC.ByteCode.Assemble[r]
+  ByteCodeFFI.lhs		GHC.ByteCode.FFI
+  ByteCodeGen.lhs		GHC.ByteCode.Generate
+  ByteCodeInstr.lhs		GHC.ByteCode.Instruction[s]
+  ByteCodeItbls.lhs		GHC.ByteCode.InfoTable[s]
+  ByteCodeLink.lhs/boot		GHC.[ByteCode.Link/Link.ByteCode]
+  Debugger.hs			GHC.Interactive.Debugger
+  GhciMonad.hs			GHCi.Monad
+  GhciTags.hs			GHCi.Tags
+  InteractiveUI.hs		GHCi.[UI/Interface] -- possibly further split-up
+  LibFFI.hsc			GHCi.ByteCode.[Generate.]FFI -- used only by ByteCodeGen
+  Linker.lhs			GHC.Link[er]
+  ObjLink.lhs			GHC.Link.Object[Code]
+  RtClosureInspect.hs		GHC.[ByteCode].ClosureInspect
+  keepCAFsForGHCi.c
+
+utils/
+  Bag.lhs			GHC.Utils.Bag
+  Binary.hs			GHC.Utils.Binary / GHC.Data.Binary?
+  BufWrite.hs			GHC.Utils.[Handle.WriteBuffered/BufWrite] 
+  Digraph.lhs			GHC.Utils.[DiGraph/Graph.Directed]
+  Encoding.hs			GHC.Utils.[Char.]Encod[e/ing]
+  Exception.hs			GHC.[Utils.]Exception
+  FastBool.lhs			GHC.Utils.FastBool
+  FastFunctions.lhs		GHC.Utils.Unsafe -- it's really a bunch of unsafe stuff
+  FastMutInt.lhs		GHC.Utils.FastMutableInt -- used only inside utils/
+  FastString.lhs		GHC.Utils.FastString
+  FastTypes.lhs			GHC.Utils.FastTypes -- or UnboxedTypes?
+  Fingerprint.hsc		GHC.Utils.Fingerprint
+  FiniteMap.lhs			GHC.Utils.FiniteMap
+  GraphBase.hs			GHC.Utils.Graph.Base
+  GraphColor.hs			GHC.Utils.Graph.Colo[u]r
+  GraphOps.hs			GHC.Utils.Graph.Operations
+  GraphPpr.hs			GHC.Utils.PrettyPrint
+  IOEnv.hs			GHC.[Utils.]Monad.IOEnv
+  Interval.hs			GHC.Utils.Interval
+  LazyUniqFM.lhs		GHC.Utils.UniqFM.Lazy
+  ListSetOps.lhs		GHC.Utils.List.SetOps
+  Maybes.lhs			GHC.Utils.Maybe
+  MonadUtils.hs			GHC.[Utils.]Monad[.Utils]
+  OrdList.lhs			GHC.Utils.OrdList
+  Outputable.lhs		GHC.Utils.Outputable
+  Panic.lhs			GHC.Utils.Panic
+  Pretty.lhs			GHC.Utils.Pretty[Print]
+  State.hs			GHC.[Utils.]Monad.State
+  StringBuffer.lhs		GHC.Utils.StringBuffer
+  Unicode.hs			GHC.Utils.Unicode
+  UniqFM.lhs			GHC.Utils.FiniteMap.Unique
+  UniqSet.lhs			GHC.Utils.Set.Unique
+  Util.lhs			GHC.Utils -- re-export other things?
+  md5.c
+  md5.h
+
+-- very unsure about these
+basicTypes/
+  BasicTypes.lhs		GHC.Types.BasicTypes -- maybe splitting might be useful
+  DataCon.lhs/boot		GHC.Types.DataCon
+  Demand.lhs			GHC.[Analyse.Demand.Old/Types.Demand.Old/Demand.Types.Old]
+  Id.lhs			GHC.Names.Id
+  IdInfo.lhs/boot		GHC.Names.Id.Info
+  Literal.lhs			GHC.[Names/Type[s]].Literal
+  MkId.lhs/boot			GHC.Names.Id.Make
+  Module.lhs/boot		GHC.Names.Module
+  				GHC.Types.ModLocation
+				GHC.Types
+  Name.lhs/boot			GHC.Names.Name
+  NameEnv.lhs			GHC.Names.Name.Env[ironment]
+  NameSet.lhs			GHC.Names.Name.Set
+  NewDemand.lhs			GHC.Anal
+  OccName.lhs/boot		GHC.Names.OccName
+  RdrName.lhs			GHC.Names.RdrName
+  SrcLoc.lhs			GHC.[Utils/Info].SrcLoc
+  UniqSupply.lhs		GHC.Utils.Unique.Supply
+  Unique.lhs			GHC.Utils.Unique
+  Var.lhs			GHC.Names.Var
+  VarEnv.lhs			GHC.Names.Var.Env[ironment]
+  VarSet.lhs			GHC.Names.Var.Set
