@@ -1,7 +1,10 @@
 what to do with C stuff?
 
-principles (so far):
+principles (so far) (correct/mark violations):
   - don't use too short names
+  - try to be consistent (i.e., either always use Decl or always use Declaration)
+  - "Types" is a collection of types to be used in the compiler
+  - "Type" is related to working with (a representation) of a Haskell type
 
 
 main/
@@ -22,7 +25,7 @@ main/
   CmdLineParser.hs		GHC.CmdLine.Parser
   DynFlags.hs                   GHC.Config.[Flags.Dynamic/DynFlags]
   Finder.lhs                    GHC.Finder
-  HscTypes.lhs/boot		GHC.[Types/DumpHereIfUnsure] -- ideas ?
+  HscTypes.lhs/boot		GHC.[Types/DumpHereIfUnsure] -- ideas?  split up how?
   InteractiveEval.hs/boot     	GHC.Interactive
   PackageConfig.hs              GHC.Config.Package[s]
   Packages.lhs/boot		GHC.Package[s]
@@ -90,18 +93,18 @@ utils/
 basicTypes/
   BasicTypes.lhs		GHC.Types.BasicTypes -- maybe splitting might be useful
   DataCon.lhs/boot		GHC.Types.DataCon
-  Demand.lhs			GHC.[Analyse.Demand.Old/Types.Demand.Old/Demand.Types.Old]
+  Demand.lhs			GHC.Types.Demand.Old
   Id.lhs			GHC.Names.Id
   IdInfo.lhs/boot		GHC.Names.Id.Info
   Literal.lhs			GHC.[Names/Type[s]].Literal
   MkId.lhs/boot			GHC.Names.Id.Make
   Module.lhs/boot		GHC.Names.Module
-  				GHC.Types.ModLocation
-				GHC.Types
+  				-- extract? GHC.Types.ModLocation
+				-- GHC.Types.<bla> ?
   Name.lhs/boot			GHC.Names.Name
   NameEnv.lhs			GHC.Names.Name.Env[ironment]
   NameSet.lhs			GHC.Names.Name.Set
-  NewDemand.lhs			GHC.Anal
+  NewDemand.lhs			GHC.Types.Demand
   OccName.lhs/boot		GHC.Names.OccName
   RdrName.lhs			GHC.Names.RdrName
   SrcLoc.lhs			GHC.[Utils/Info].SrcLoc
@@ -110,3 +113,214 @@ basicTypes/
   Var.lhs			GHC.Names.Var
   VarEnv.lhs			GHC.Names.Var.Env[ironment]
   VarSet.lhs			GHC.Names.Var.Set
+
+types/
+  Class.lhs			GHC.[Haskell.]Types.Class
+  Coercion.lhs			GHC.[Haskell.]Types.Coercion
+  FamInstEnv.lhs		GHC.Typecheck.FamInstEnv -- ?
+  FunDeps.lhs			GHC.[Haskell.]Types.FunDeps
+  Generics.lhs			GHC.[Haskell.]Types.Generics -- !!
+  InstEnv.lhs			GHC.Typecheck.InstEnv -- ?
+  TyCon.lhs/boot		GHC.[Haskell.]Types.TyCon
+  Type.lhs			GHC.[Haskell.]Types.Type
+  TypeRep.lhs/boot		GHC.[Haskell.]Types.Type.Rep -- !!
+  Unify.lhs			GHC.Type.Unify -- ?
+
+hsSyn/
+  Convert.lhs			GHC.Haskell.Syntax.[TH/TemplateHaskell].Convert
+  HsBinds.lhs			GHC.Haskell.Syntax.Bind[er] -- what about sigs?
+  HsDecls.lhs			GHC.Haskell.Syntax.Declaration
+  HsDoc.hs			GHC.Haskell.Syntax.Documentation
+  HsExpr.lhs/boot		GHC.Haskell.Syntax.Expression
+  HsImpExp.lhs			GHC.Haskell.Syntax.ImportExport
+  HsLit.lhs			GHC.Haskell.Syntax.Literal
+  HsPat.lhs/boot		GHC.Haskell.Syntax.Pattern
+  HsSyn.lhs			GHC.Haskell.Syntax
+  HsTypes.lhs			GHC.Haskell.Syntax.Type
+  HsUtils.lhs			GHC.Haskell.Syntax.Utils
+
+parser/
+  Ctype.lhs			GHC.[Haskell.Parser.]Utils.ClassifyChar
+  HaddockLex.hs-boot
+  HaddockLex.x			Haddock.Lexer  -- can this clash with haddock itself?
+  HaddockParse.y		Haddock.Parser -- ditto
+  HaddockUtils.hs		Haddock.Parser.Utils -- ditto
+  Lexer.x			GHC.Haskell.Lexer
+  Parser.y[.pp]			GHC.Haskell.Parser
+  RdrHsSyn.lhs			GHC.Haskell.Parser.Syntax -- ?
+  LexCore.hs			GHC.Core.Lexer
+  ParserCore.y			GHC.Core.Parser
+  ParserCoreUtils.hs		GHC.Core.Parser.Utils
+  cutils.c
+  cutils.h
+  hschooks.c
+
+typecheck/
+  FamInst.lhs			GHC.Typecheck.FamilyInstance
+  Inst.lhs			GHC.Typecheck.Instance
+  TcArrows.lhs			GHC.Typecheck.Arrows
+  TcBinds.lhs			GHC.Typecheck.Binders
+  TcClassDcl.lhs		GHC.Typecheck.ClassDeclaration
+  TcDefaults.lhs		GHC.Typecheck.Defaults
+  TcDeriv.lhs			GHC.Typecheck.Deriving
+  TcEnv.lhs/boot		GHC.Typecheck.Environment
+  TcExpr.lhs/boot		GHC.Typecheck.Expression
+  TcForeign.lhs			GHC.Typecheck.Foreign
+  TcGenDeriv.lhs		GHC.Typecheck.Deriving.Generate
+  TcHsSyn.lhs			GHC.Typecheck.Haskell.Syntax -- ?
+  TcHsType.lhs			GHC.Typecheck.Haskell.[Mono]Type -- ?
+  TcInstDcls.lhs		GHC.Typecheck.InstanceDeclaration
+  TcMType.lhs			GHC.Typecheck.Monad.TypeOps
+  TcMatches.lhs/boot		GHC.Typecheck.Matches
+  TcPat.lhs			GHC.Typecheck.Pattern
+  TcRnDriver.lhs		GHC.Typecheck[Rename].[Driver/Module]
+  TcRnMonad.lhs			GHC.Typecheck[Rename].Monad
+  TcRnTypes.lhs/boot		GHC.Typecheck.Types
+  TcRules.lhs			GHC.Typecheck.Rules
+  TcSimplify.lhs		-- ?
+  TcSplice.lhs/boot		GHC.Typecheck.Splice
+  TcTyClsDecls.lhs		GHC.Typecheck.TypeAndClassDeclaration
+  TcTyDecls.lhs			GHC.Typecheck.TypeDeclaration
+  TcTyFuns.lhs			GHC.Typecheck.TypeFunction
+  TcType.lhs/boot		GHC.Typecheck.Type
+  TcUnify.lhs/boot		GHC.Typecheck.Unify
+
+rename/
+  RnBinds.lhs			GHC.Rename.Bind[er]
+  RnEnv.lhs			GHC.Rename.Environment
+  RnExpr.lhs/boot		GHC.Rename.Expression
+  RnHsDoc.hs			GHC.Rename.Haskell.Syntax.Documentation
+  RnHsSyn.lhs			GHC.Rename.Haskell.Syntax
+  RnNames.lhs			GHC.Rename.[Names/ImportsExports]
+  RnPat.lhs			GHC.Rename.Pattern
+  RnSource.lhs			GHC.Rename.Main
+  RnTypes.lhs			GHC.Rename.Type -- module description wrong
+  rename.tex
+
+coreSyn/
+   <new>			GHC.Core -- re-exports CoreSyn and utils
+  CoreFVs.lhs			GHC.Core.FreeVars
+  CoreLint.lhs			GHC.Core.Lint
+  CorePrep.lhs			GHC.Core.Prepare -- ?
+  CoreSubst.lhs			GHC.Core.Subst
+  CoreSyn.lhs			GHC.Core.[Syntax/Types]
+  CoreTidy.lhs			GHC.Core.Tidy
+  CoreUnfold.lhs		GHC.Core.Unfold
+  CoreUtils.lhs			GHC.Core.Utils
+  MkCore.lhs			GHC.Core.Make
+  PprCore.lhs			GHC.Core.Pretty[Print]
+  ExternalCore.lhs		GHC.ExternalCore  -- no imports
+  MkExternalCore.lhs		GHC.ExternalCore.Make -- local import only CoreSyn
+  PprExternalCore.lhs		GHC.ExternalCore.Pretty[Print]
+
+deSugar/
+  Coverage.lhs			GHC.Desugar.[Program]Coverage
+  Desugar.lhs			GHC.Desugar
+  DsArrows.lhs			GHC.Desugar.Arrows
+  DsBinds.lhs			GHC.Desugar.Bind[er]s
+  DsCCall.lhs			GHC.Desugar.Foreign.Call
+  DsExpr.lhs/boot		GHC.Desugar.Expression
+  DsForeign.lhs			GHC.Desugar.Foreign.Declaration]
+  DsGRHSs.lhs			GHC.Desugar.GuardedRHS
+  DsListComp.lhs		GHC.Desugar.ListComp[rehension]
+  DsMeta.hs			GHC.Desugar.Meta -- ? what is this?
+  DsMonad.lhs			GHC.Desugar.Monad
+  DsUtils.lhs			GHC.Desugar.Utils
+  Match.lhs/boot		GHC.Desugar.Match -- ?
+  Check.lhs			GHC.Desugar.Match.Check
+  MatchCon.lhs			GHC.Desugar.Match.Constructor
+  MatchLit.lhs			GHC.Desugar.Match.Literal[Pattern] -- also used by DsExpr, DsMeta
+
+iface/
+  BinIface.hs			GHC.Interface.Binary
+  BuildTyCl.lhs			GHC.Interface.BuildTypeAndClass
+  IfaceEnv.lhs			GHC.Interface.Environment
+  IfaceSyn.lhs			GHC.Interface.[Syntax/Types]
+  IfaceType.lhs			GHC.Interface.[Type/Types]
+  LoadIface.lhs			GHC.Interface.Load
+  MkIface.lhs			GHC.Interface.Make
+  TcIface.lhs/boot		GHC.Interface.Typecheck / GHC.Typecheck.Interface -- maybe both (i.e. re-export)?  seems to import only one Tc* module
+
+simplCore/
+  SimplCore.lhs			GHC.Core.Simplify
+  SimplEnv.lhs			GHC.Core.Simplify.Environment
+  SimplMonad.lhs		GHC.Core.Simplify.Monad
+  SimplUtils.lhs		GHC.Core.Simplify.Utils
+  Simplify.lhs			GHC.Core.Simplify.[Pass/Once/Step]
+  CSE.lhs			GHC.Core.Simplify.[CSE/CommonSubexprElim]
+  SAT.lhs			GHC.Core.Simplify.[StaticArgTrans/StaticArgumentTransformation]
+  FloatIn.lhs			GHC.Core.Simplify.FloatIn
+  FloatOut.lhs			GHC.Core.Simplify.FloatOut
+  SetLevels.lhs			GHC.Core.Simplify.FloatOut.SetLevels
+  LiberateCase.lhs		GHC.Core.Simplify.LiberateCase
+  OccurAnal.lhs			GHC.Core.OccurenceAnalysis -- used by SimplCore, CoreUnfold, DsBinds, Rules
+  simplifier.tib		
+
+stranal/
+  DmdAnal.lhs			GHC.Core.DemandAnalysis
+  SaAbsInt.lhs			GHC.Core.DemandAnalysis.AbstractInterp
+  SaLib.lhs			GHC.Core.StrictAnalysis.Types -- old strictness stuff
+  StrictAnal.lhs		GHC.Core.StrictAnalysis -- old
+  WorkWrap.lhs			GHC.Core.Work[er]Wrap[per]
+  WwLib.lhs			GHC.Core.Work[er]Wrap[per].Utils
+
+cprAnalysis/
+  CprAnalyse.lhs		-- part of old strictness anal.
+
+-- this could go below GHC.Core. or become a separate top-level thingy
+vectorise/
+  VectBuiltIn.hs		-- only used by VectMonad
+  VectCore.hs			GHC.Core.Vectorise -- .Core/Main/Pass/Step ?
+  VectMonad.hs			GHC.Core.Vectorise.Monad
+  VectType.hs			GHC.Core.Vectorise.Type
+  VectUtils.hs			GHC.Core.Vectorise.Utils
+  Vectorise.hs			GHC.Core.[Simplify.]Vectorise -- ? (called only by SimplCore)
+
+specialise/
+  Rules.lhs			GHC.Core.Rules -- maybe extract GHC.Types.Rules for syntax etc.
+  SpecConstr.lhs		GHC.Core.Simplify.Spec[ialise]Constr[uctor] --only used by SimplCore
+  Specialise.lhs		GHC.Core.Simplify.Specialise -- only used by SimplCore
+
+stgSyn/
+  CoreToStg.lhs			GHC.Core.ToSTG / GHC.STG.FromCore / GHC.CoreToSTG
+  StgLint.lhs			GHC.STG.Lint
+  StgSyn.lhs			GHC.STG
+
+simplStg/
+  SRT.lhs			GHC.STG.Simplify.StaticReferenceTable
+  SimplStg.lhs			GHC.STG.Simplify
+  StgStats.lhs			GHC.STG.Simplify.Stats
+
+profiling/
+  CostCentre.lhs		GHC.Types[.Profiling].CostCentre
+  NOTES				-- merge into haddocks somewhere? (where?)
+  SCCfinal.lhs			GHC.STG.Simplify.SCCFinal -- better name? (called only by SimplStg)
+
+-- alternatively: GHC.BuiltIn.*
+prelude/
+  ForeignCall.lhs		GHC.Prelude.ForeignCalls -- is this just a bunch of types?
+  PrelInfo.lhs			GHC.Prelude.Info
+  PrelNames.lhs			GHC.Prelude.Names
+  PrelRules.lhs			GHC.Prelude.Rules
+  PrimOp.lhs			GHC.Prelude.PrimOps
+  TysPrim.lhs			GHC.Prelude.PrimTypes
+  TysWiredIn.lhs		GHC.Prelude.WiredInTypeKnowledge -- ?
+  primops.txt[.pp]		-- still used?
+
+
+------------------------------------------------------------------------------
+-- probably changed by John Dias' patche
+
+s
+-- General Idea, put it under GHC.Cmm (with GHC. prefix because it
+-- at least uses some utils, 'Name', 'StaticFlags', etc.)
+cmm/
+...
+
+-- GHC.CodeGen.*
+codeGen/
+
+-- GHC.NativeGen.* or GHC.CodeGen.Native.*
+nativeGen/
+
+
